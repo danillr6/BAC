@@ -1,38 +1,297 @@
-.App {
-  text-align: center;
+:root {
+  --bg-color: #0f172a;       
+  --card-bg: #1e293b;        
+  --text-primary: #f8fafc;   
+  --text-secondary: #94a3b8; 
+  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); 
+  --recording-color: #ef4444; 
+  --border-radius: 24px;
+  --user-msg-bg: rgba(99, 102, 241, 0.2);
+  --ai-msg-bg: rgba(255, 255, 255, 0.1);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+/* En src/App.css */
 
-.App-header {
-  background-color: #282c34;
+body {
+  /* Mantenemos el color base por si la imagen no carga */
+  background-color: var(--bg-color);
+  
+  /* --- NUEVO FONDO --- */
+  /* 1. Ponemos una imagen de fondo (ejemplo de Unsplash de vida nocturna) */
+  background-image: url('https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  
+  /* 2. Aseguramos que cubra toda la pantalla sin repetirse */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Fijo al hacer scroll */
+
+  /* 3. TÉCNICA CLAVE: "background-blend-mode" */
+  /* Esto mezcla la imagen con el color de fondo (--bg-color) para oscurecerla mucho */
+  background-blend-mode: overlay; 
+  /* Si lo quieres aún más oscuro, cambia 'overlay' por 'multiply' */
+  
+  /* --- Resto de propiedades necesarias que ya tenías --- */
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
+  margin: 0;
+  padding: 20px; /* Añadido un pequeño padding para móviles muy pequeños */
+}
+
+/* OPCIONAL: Añadir un ligero desenfoque extra a la imagen (puede afectar al rendimiento en móviles antiguos) */
+/* body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  backdrop-filter: blur(5px);
+  z-index: -1;
+}
+*/
+.container {
+  background-color: var(--card-bg);
+  width: 100%;
+  max-width: 450px; /* Un poco más ancho */
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  /* Altura mínima para que la caja no se vea pequeña al principio */
+  min-height: 600px; 
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+/* Estilo para el nuevo texto instructivo */
+.instructions {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.instructions strong {
+  color: var(--text-primary);
+}
+
+/* CAJA DE CHAT MÁS GRANDE */
+.chat-box {
+  flex-grow: 1; /* Ocupa el espacio disponible */
+  max-height: none; /* Quitamos el límite de altura fija */
+  overflow-y: auto;
+  margin-bottom: 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  /* Barra de scroll más estética */
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-secondary) transparent;
+}
+
+/* Estilos para los mensajes */
+.message {
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  max-width: 85%;
+  word-wrap: break-word;
+}
+
+.message.user {
+  background: var(--user-msg-bg);
+  align-self: flex-end; /* Alineado a la derecha */
+  border-bottom-right-radius: 4px;
+}
+
+.message.model {
+  background: var(--ai-msg-bg);
+  align-self: flex-start; /* Alineado a la izquierda */
+  border-bottom-left-radius: 4px;
+}
+
+.status-text {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.data-summary {
+  background: #22c55e;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
   color: white;
+  text-align: left;
+}
+.data-summary h3 {
+  margin-top: 0;
 }
 
-.App-link {
-  color: #61dafb;
+.audio-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.mic-button {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent-gradient);
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+}
+
+.mic-button:active {
+  transform: scale(0.95);
+}
+
+.mic-button.is-recording {
+  background: var(--recording-color);
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.input-section {
+  width: 100%;
+}
+
+.text-input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 16px;
+  border: 1px solid #334155;
+  background-color: #0f172a;
+  color: var(--text-primary);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.text-input:focus {
+  border-color: #6366f1;
+}
+
+
+/* --- ESTILOS DE LA PANTALLA DE BIENVENIDA --- */
+.welcome-container {
+  background: rgba(255, 255, 255, 0.05); /* Fondo muy sutil */
+  border-radius: 16px;
+  padding: 20px;
+  margin: 10px 0 20px 0;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.welcome-title {
+  color: #e2e8f0;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.tags-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.tag-item {
+  background: rgba(59, 130, 246, 0.15); /* Azul translúcido */
+  color: #93c5fd; /* Azul claro texto */
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s ease;
+}
+
+.tag-item:hover {
+  background: rgba(59, 130, 246, 0.25);
+  transform: translateY(-2px);
+  cursor: default;
+}
+
+.tag-item i {
+  font-size: 0.85rem;
+}
+
+/* El último elemento ocupa todo el ancho para destacar */
+.tag-item.full {
+  width: 100%; 
+  justify-content: center;
+  background: rgba(16, 185, 129, 0.15); /* Verde translúcido para las bebidas */
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+
+
+
+/* Copia y pega esto en App.css (borra el anterior .calculate-btn) */
+
+.calculate-btn {
+  background-color: #3b82f6; /* Azul moderno mate (o usa #10b981 para verde) */
+  color: #ffffff;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px; /* Bordes suavemente redondeados */
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 15px;
+  transition: all 0.2s ease; /* Suavidad al pasar el mouse */
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calculate-btn:hover {
+  background-color: #2563eb; /* Un poco más oscuro al pasar el mouse */
+  transform: translateY(-1px); /* Se eleva un milímetro */
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.calculate-btn:active {
+  transform: translateY(0);
+}
+
+/* ELIMINAMOS LA ANIMACIÓN DE PULSO PARA QUE SEA QUIETO */
+.pulse-animation {
+  animation: none;
 }
