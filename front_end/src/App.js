@@ -5,7 +5,7 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/ge
 import Resultados from './Resultados'; // Importamos la nueva página
 
 // TU CLAVE API (Recuerda poner una válida si te da error 403)
-const GEMINI_API_KEY = "AIzaSyAmVbOGatq4BJCKN-aqblLa63dDam5pj8A"; 
+const GEMINI_API_KEY = "AIzaSyDjAE22hxrQC9Vm0LWgX8D-EH1hi5tkeYs"; 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // --- COMPONENTE PRINCIPAL DEL CHAT ---
@@ -74,7 +74,7 @@ function ChatScreen({ chatHistory, setChatHistory, userData, setUserData }) {
         }))
       };
 
-      const response = await fetch('https://bac-vrdn.onrender.com', {
+      const response = await fetch('bac-proyecto.vercel.app', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -135,7 +135,7 @@ ${drinksList}
     setInputText("");
 
     try {
-      // CORRECCIÓN: Usamos el modelo 1.5-flash que es el estable y correcto
+      // CORRECCIÓN: Usamos el modelo 2.5-flash que es el estable y correcto
       const model = genAI.getGenerativeModel({ 
         model: "gemini-2.5-flash", 
         safetySettings: [
