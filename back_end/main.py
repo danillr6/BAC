@@ -5,10 +5,11 @@ from typing import List
 
 app = FastAPI()
 
-# Esto permite que tu React se conecte a Python
+# Configuración de CORS corregida
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # En producción pondríamos la URL de React
+    allow_origins=["*"],  # Permite que tu web de Vercel se conecte
+    allow_credentials=True, # Añadido para evitar errores de seguridad
     allow_methods=["*"],
     allow_headers=["*"],
 )
