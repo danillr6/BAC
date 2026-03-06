@@ -74,7 +74,7 @@ function ChatScreen({ chatHistory, setChatHistory, userData, setUserData }) {
         }))
       };
 
-      const response = await fetch('bac-proyecto.vercel.app', {
+      const response = await fetch('https://bac-vrdn.onrender.com/simular', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
