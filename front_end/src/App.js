@@ -5,8 +5,8 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/ge
 import Resultados from './Resultados'; // Importamos la nueva página
 
 // TU CLAVE API (Recuerda poner una válida si te da error 403)
-const API_KEY = "AIzaSyAmVbOGatq4BJCKN-aqblLa63dDam5pj8A"; 
-const genAI = new GoogleGenerativeAI(API_KEY);
+const GEMINI_API_KEY = "AIzaSyAmVbOGatq4BJCKN-aqblLa63dDam5pj8A"; 
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // --- COMPONENTE PRINCIPAL DEL CHAT ---
 // Ahora recibe el historial y los datos desde App para que no se borren al cambiar de pantalla
