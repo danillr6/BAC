@@ -5,7 +5,7 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/ge
 import Resultados from './Resultados'; // Importamos la nueva página
 
 // TU CLAVE API (Recuerda poner una válida si te da error 403)
-const GEMINI_API_KEY = "AIzaSyDjAE22hxrQC9Vm0LWgX8D-EH1hi5tkeYs"; 
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY || "AIzaSyDjAE22hxrQC9Vm0LWgX8D-EH1hi5tkeYs";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // --- COMPONENTE PRINCIPAL DEL CHAT ---
