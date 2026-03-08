@@ -5,9 +5,9 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/ge
 import Resultados from './Resultados'; // Importamos la nueva página
 
 // LA CLAVE ESTA EN VERCEL
-//Publica :const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API;
-//En local:
-const GEMINI_API_KEY = 'AIzaSyDs04kZR0plFHt0UKxhTiboJ_PwbAXHKZk';
+//Publica : 
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API;
+//En local: const GEMINI_API_KEY = 'AIzaSyDs04kZR0plFHt0UKxhTiboJ_PwbAXHKZk';
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
@@ -79,7 +79,7 @@ function ChatScreen({ chatHistory, setChatHistory, userData, setUserData }) {
 
       //URL Local: http://127.0.0.1:8000/simular
       //URL Publicab https://bac-vrdn.onrender.com/simular
-      const response = await fetch('http://127.0.0.1:8000/simular', {
+      const response = await fetch('https://bac-vrdn.onrender.com/simular', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
