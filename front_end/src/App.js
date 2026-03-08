@@ -18,7 +18,7 @@ function ChatScreen({ chatHistory, setChatHistory, userData, setUserData }) {
   const recognitionRef = useRef(null);
   const chatEndRef = useRef(null);
   const isStoppedByButton = useRef(false);
-  const navigate = useNavigate(); // Herramienta para saltar a la página de resultados
+  const navigate = useNavigate(); // Herramienta para saltar a la pagina de resultados
 
   // Scroll automático
   const scrollToBottom = () => {
