@@ -40,24 +40,20 @@ function ChatScreen({ chatHistory, setChatHistory, userData, setUserData }) {
       recognitionRef.current.interimResults = true; 
       recognitionRef.current.lang = 'es-ES';
 
-     recognitionRef.current.onresult = (event) => {
-      let interimTranscript = '';
-      let finalTranscript = '';
+      recognitionRef.current.onresult = (event) => {
+        let finalTranscript = ''; // Solo dejamos esta
 
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript;
-        } else {
-          interimTranscript += event.results[i][0].transcript;
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          }
+          // El "else" ha desaparecido
         }
-      }
 
-      // SOLO actualizamos el input con el texto final confirmado
-      if (finalTranscript !== '') {
-        // Usamos una función de limpieza para evitar que se peguen palabras
-        setInputText(prev => (prev + ' ' + finalTranscript).trim().replace(/\s\s+/g, ' '));
-      }
-    };
+        if (finalTranscript !== '') {
+          setInputText(prev => (prev + ' ' + finalTranscript).trim().replace(/\s\s+/g, ' '));
+        }
+      };
 
       recognitionRef.current.onend = () => {
         if (isStoppedByButton.current) {
