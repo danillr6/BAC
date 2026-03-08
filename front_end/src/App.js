@@ -37,22 +37,15 @@ function ChatScreen({ chatHistory, setChatHistory, userData, setUserData }) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true; 
-      recognitionRef.current.interimResults = false; 
+      recognitionRef.current.interimResults = true; 
       recognitionRef.current.lang = 'es-ES';
 
       recognitionRef.current.onresult = (event) => {
-        let finalTranscript = ''; // Solo dejamos esta
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          }
-          // El "else" ha desaparecido
+        let finalTranscript = '';
+        for (let i = 0; i < event.results.length; ++i) {
+          finalTranscript += event.results[i][0].transcript;
         }
-
-        if (finalTranscript !== '') {
-          setInputText(prev => (prev + ' ' + finalTranscript).trim().replace(/\s\s+/g, ' '));
-        }
+        setInputText(finalTranscript);
       };
 
       recognitionRef.current.onend = () => {
@@ -141,17 +134,13 @@ ${drinksList}
   const handleSendToAI = async (message) => {
     if (!message) return;
 
-    // 1. LIMPIEZA: Eliminamos palabras repetidas consecutivas (típico error de móviles)
-    const cleanMessage = message.split(' ').filter((w, i, a) => w !== a[i-1]).join(' ');
-
-    // 2. ACTUALIZACIÓN VISUAL: Usamos el texto limpio en el chat
-    const newHistory = [...chatHistory, { role: 'user', text: cleanMessage }];
+    const newHistory = [...chatHistory, { role: 'user', text: message }];
     setChatHistory(newHistory);
     setIsLoading(true);
     setInputText("");
 
     try {
-      // Configuramos el modelo (Asegúrate de que GEMINI_API_KEY esté bien definida arriba)
+      // CORRECCIÓN: Usamos el modelo 2.5-flash que es el estable y correcto
       const model = genAI.getGenerativeModel({ 
         model: "gemini-2.5-flash", 
         safetySettings: [
@@ -162,16 +151,17 @@ ${drinksList}
         ]
       });
 
-      // El System Prompt le dice a la IA cómo debe comportarse
       const systemPrompt = `
             Eres un experto en alcoholemia. Recopila: Sexo, Peso, Altura, Edad, Bebidas.
             
             REGLAS DE SEGURIDAD:
             1. Si el usuario menciona dos bebidas a la misma hora exacta, PREGUNTA antes de seguir: "¿Podrías decirme cuántos minutos pasaron entre la primera y la segunda?".
             2. Si no dan la graduación, usa estas por defecto: Cerveza: 5.0, Vino: 12.0, Copas: 40.0, Chupitos: 40.0.
-            3. REGLA DEL CUBATA: Registro de 50ml al 40% (el resto es hielo/refresco).
 
-            JSON FINAL (ESTRICTO): Responde SOLO con el JSON si los datos están completos. 
+            3. REGLA DEL CUBATA/COPA (¡CRÍTICO!): Un combinado lleva refresco. Aunque el usuario diga que el vaso es de 200ml o 300ml, tú registrarás SIEMPRE "ml": 50 y "graduacion": 40.0, ya que el resto es hielo y refresco. Solo registrarás más de 50ml si el usuario dice explícitamente "doble" o "puro".
+            JSON FINAL (ESTRICTO): Responde SOLO con el JSON. 
+            Importante: "graduacion" debe ser un NÚMERO (decimal con punto).
+            
             {
               "completed": true,
               "sex": "Hombre/Mujer",
@@ -184,24 +174,17 @@ ${drinksList}
             }
           `;
 
-      // Preparamos el historial para la API
       const apiHistory = [
         { role: "user", parts: [{ text: systemPrompt }] },
-        { role: "model", parts: [{ text: "Entendido. Generaré el JSON detallado cuando los datos estén completos." }] },
-        ...newHistory.map(msg => ({ 
-          role: msg.role === 'user' ? 'user' : 'model', 
-          parts: [{ text: msg.text }] 
-        }))
+        { role: "model", parts: [{ text: "Entendido. Generaré el JSON con objetos detallados (ml numéricos) al final." }] },
+        ...newHistory.map(msg => ({ role: msg.role === 'user' ? 'user' : 'model', parts: [{ text: msg.text }] }))
       ];
 
       const chat = model.startChat({ history: apiHistory });
-      
-      // 3. ENVÍO: Enviamos el mensaje LIMPIO a Gemini
-      const result = await chat.sendMessage(cleanMessage); 
+      const result = await chat.sendMessage(message);
       const response = result.response.text();
 
       try {
-        // Limpiamos la respuesta por si Gemini añade Markdown (```json)
         const cleanResponse = response.replace(/```json/g, '').replace(/```/g, '').trim();
         const jsonStart = cleanResponse.indexOf('{');
         const jsonEnd = cleanResponse.lastIndexOf('}') + 1;
