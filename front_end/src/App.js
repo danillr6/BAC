@@ -236,7 +236,7 @@ ${drinksList}
   return (
     <div className="container">
       <header>
-        <h1>Control de Alcohol</h1>
+        <h1>Control de Alcohol V2</h1>
       </header>
 
       <div className="chat-box">
