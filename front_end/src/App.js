@@ -40,13 +40,21 @@ function ChatScreen({ chatHistory, setChatHistory, userData, setUserData }) {
       recognitionRef.current.interimResults = true; 
       recognitionRef.current.lang = 'es-ES';
 
-      recognitionRef.current.onresult = (event) => {
-        let finalTranscript = '';
-        for (let i = 0; i < event.results.length; ++i) {
+     recognitionRef.current.onresult = (event) => {
+      let finalTranscript = '';
+      // Recorremos los resultados desde donde se quedó el último
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        // Solo añadimos el texto si el navegador confirma que es "final"
+        if (event.results[i].isFinal) {
           finalTranscript += event.results[i][0].transcript;
         }
-        setInputText(finalTranscript);
-      };
+      }
+      
+      // Actualizamos el input solo con el texto limpio y final
+      if (finalTranscript !== '') {
+        setInputText(prev => prev + finalTranscript);
+      }
+    };;
 
       recognitionRef.current.onend = () => {
         if (isStoppedByButton.current) {
