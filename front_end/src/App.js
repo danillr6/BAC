@@ -4,7 +4,7 @@ import './App.css';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import Resultados from './Resultados'; // Importamos la nueva página
 
-// TU CLAVE API (Recuerda poner una válida si te da error 403)
+// LA CLAVE ESTA EN VERCEL
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API;
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
