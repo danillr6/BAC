@@ -32,20 +32,28 @@ function ChatScreen({ chatHistory, setChatHistory, userData, setUserData }) {
   }, [chatHistory, isLoading, userData]);
 
   // Configuración de Voz
+  // Configuración de Voz
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true; 
-      recognitionRef.current.interimResults = true; 
+      recognitionRef.current.interimResults = false; // <-- CRÍTICO PARA MÓVIL (evita el eco)
       recognitionRef.current.lang = 'es-ES';
 
       recognitionRef.current.onresult = (event) => {
         let finalTranscript = '';
-        for (let i = 0; i < event.results.length; ++i) {
-          finalTranscript += event.results[i][0].transcript;
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          }
         }
-        setInputText(finalTranscript);
+
+        // Solo actualizamos si hay texto final real
+        if (finalTranscript !== '') {
+          setInputText(prev => (prev + ' ' + finalTranscript).trim().replace(/\s\s+/g, ' '));
+        }
       };
 
       recognitionRef.current.onend = () => {
@@ -134,13 +142,16 @@ ${drinksList}
   const handleSendToAI = async (message) => {
     if (!message) return;
 
-    const newHistory = [...chatHistory, { role: 'user', text: message }];
+    // LIMPIEZA: Filtramos repeticiones por si el móvil se vuelve loco
+    const cleanMessage = message.split(' ').filter((w, i, a) => w !== a[i-1]).join(' ');
+
+    // Usamos el texto limpio para la pantalla
+    const newHistory = [...chatHistory, { role: 'user', text: cleanMessage }];
     setChatHistory(newHistory);
     setIsLoading(true);
     setInputText("");
 
     try {
-      // CORRECCIÓN: Usamos el modelo 2.5-flash que es el estable y correcto
       const model = genAI.getGenerativeModel({ 
         model: "gemini-2.5-flash", 
         safetySettings: [
@@ -181,7 +192,9 @@ ${drinksList}
       ];
 
       const chat = model.startChat({ history: apiHistory });
-      const result = await chat.sendMessage(message);
+      
+      // CRÍTICO: Enviamos a la IA el mensaje limpio, no el repetido
+      const result = await chat.sendMessage(cleanMessage);
       const response = result.response.text();
 
       try {
