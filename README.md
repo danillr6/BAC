@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# 🍷 Simulador de Alcoholemia Inteligente
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Un simulador avanzado de la concentración de alcohol en sangre (BAC) y aire espirado (BrAC). Utiliza inteligencia artificial para recopilar datos del usuario mediante voz o texto, y un modelo farmacocinético en el backend para generar curvas de metabolismo precisas.
 
-## Available Scripts
+## 🚀 Tecnologías Utilizadas
 
-In the project directory, you can run:
+* **Frontend:** React.js, React Router, Recharts (para gráficas).
+* **Backend:** Python, FastAPI / Uvicorn.
+* **Inteligencia Artificial:** Google Gemini 1.5 Flash.
+* **Voz:** Web Speech API.
 
-### `npm start`
+## ⚙️ Requisitos Previos
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Antes de ejecutar el proyecto, asegúrate de tener instalado:
+* [Node.js](https://nodejs.org/) (para ejecutar React)
+* [Python 3.8+](https://www.python.org/) (para ejecutar el backend)
+* Una clave API válida de Google Gemini (configurada en el archivo `App.js`).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Instrucciones de Instalación y Ejecución
 
-### `npm test`
+Para que el proyecto funcione correctamente, debes arrancar tanto el servidor Backend como el servidor Frontend al mismo tiempo en dos terminales distintas.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. Iniciar el Backend (Python)
+Abre una terminal en la carpeta de tu backend y ejecuta:
+\`\`\`bash
+# Instalar las dependencias (si no lo has hecho ya)
+pip install fastapi uvicorn pydantic
 
-### `npm run build`
+# Arrancar el servidor
+uvicorn logica:app --reload
+\`\`\`
+*El servidor backend se ejecutará en:* **`http://127.0.0.1:8000`**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2. Iniciar el Frontend (React)
+Abre otra terminal en la carpeta de tu frontend y ejecuta:
+\`\`\`bash
+# Instalar los paquetes de Node
+npm install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Arrancar la aplicación web
+npm start
+\`\`\`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🌐 Rutas de la Aplicación
 
-### `npm run eject`
+Una vez que ambos servidores estén corriendo, puedes acceder a la aplicación desde tu navegador:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* **Página Principal (Chat e IA):** [http://localhost:3000/](http://localhost:3000/)
+* **Página de Resultados (Gráficas):** [http://localhost:3000/resultados](http://localhost:3000/resultados)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+*Nota: Recuerda conceder permisos de micrófono en tu navegador si deseas utilizar la función de entrada por voz.*
