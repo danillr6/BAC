@@ -1,52 +1,52 @@
-# 🍷 Simulador de Alcoholemia Inteligente
+# Simulador Avanzado de Alcoholemia (BAC/BrAC)
 
-Un simulador avanzado de la concentración de alcohol en sangre (BAC) y aire espirado (BrAC). Utiliza inteligencia artificial para recopilar datos del usuario mediante voz o texto, y un modelo farmacocinético en el backend para generar curvas de metabolismo precisas.
+Este proyecto es una aplicación web avanzada diseñada para calcular y simular la evolución de la Concentración de Alcohol en Sangre (BAC) y la Concentración de Alcohol en Aire Espirado (BrAC) a lo largo del tiempo. 
 
-## 🚀 Tecnologías Utilizadas
+A diferencia de las calculadoras estándar basadas en fórmulas estáticas, este sistema implementa un modelo farmacocinético de un compartimento. Simula la absorción gástrica y la eliminación hepática de orden cero mediante un algoritmo iterativo, proporcionando resultados precisos respaldados por estándares de toxicología forense.
 
-* **Frontend:** React.js, React Router, Recharts (para gráficas).
-* **Backend:** Python, FastAPI / Uvicorn.
-* **Inteligencia Artificial:** Google Gemini 1.5 Flash.
-* **Voz:** Web Speech API.
+## Características Principales
 
-## ⚙️ Requisitos Previos
+* **Interfaz Conversacional Inteligente:** Integración con Google Gemini 1.5 Flash para extraer estructuradamente los datos del usuario (perfil fisiológico y patrón de consumo) a partir de lenguaje natural.
+* **Entrada Multimodal:** Soporte para interacción mediante texto tradicional o reconocimiento de voz en tiempo real utilizando la Web Speech API.
+* **Modelado Biológico:** Algoritmos backend que aplican la Ecuación de Watson para el cálculo del agua corporal total (TBW) y aplican tasas estandarizadas de absorción y metabolización.
+* **Visualización de Datos Analíticos:** Gráficas interactivas que proyectan la curva de alcoholemia durante múltiples horas, marcando de forma clara los límites legales para la conducción.
+* **Arquitectura Desacoplada:** Separación clara entre la lógica de presentación (Frontend) y el motor de cálculo matemático (Backend).
 
-Antes de ejecutar el proyecto, asegúrate de tener instalado:
-* [Node.js](https://nodejs.org/) (para ejecutar React)
-* [Python 3.8+](https://www.python.org/) (para ejecutar el backend)
-* Una clave API válida de Google Gemini (configurada en el archivo `App.js`).
+## Tecnologías Utilizadas
 
-## 🛠️ Instrucciones de Instalación y Ejecución
+**Frontend:**
+* React.js
+* React Router (Gestión de estado y navegación)
+* Recharts (Renderizado de gráficas vectoriales)
+* Web Speech API
 
-Para que el proyecto funcione correctamente, debes arrancar tanto el servidor Backend como el servidor Frontend al mismo tiempo en dos terminales distintas.
+**Backend:**
+* Python 3.8+
+* FastAPI (Desarrollo de API RESTful)
+* Uvicorn (Servidor ASGI)
+* Pydantic (Validación de datos)
 
-### 1. Iniciar el Backend (Python)
-Abre una terminal en la carpeta de tu backend y ejecuta:
-\`\`\`bash
-# Instalar las dependencias (si no lo has hecho ya)
+**Inteligencia Artificial:**
+* Google Generative AI SDK (Modelo Gemini 1.5 Flash)
+
+## Entorno de Producción
+
+La interfaz principal de la aplicación se encuentra desplegada y accesible a través del siguiente enlace:
+
+**URL de la Aplicación:** https://calculadora-alcohol-sangre.vercel.app/
+
+*(Nota: Para el correcto funcionamiento de la aplicación web alojada en Vercel, el servidor backend de cálculo debe estar en ejecución y accesible desde el cliente, o debidamente desplegado en un servicio en la nube compatible).*
+
+## Instrucciones para Entorno de Desarrollo Local
+
+Para ejecutar el proyecto en una máquina local, es necesario iniciar los entornos de backend y frontend de manera simultánea en terminales separadas.
+
+### 1. Configuración del Backend (Python)
+Navegue hasta el directorio del backend y ejecute los siguientes comandos:
+
+```bash
+# Instalación de dependencias necesarias
 pip install fastapi uvicorn pydantic
 
-# Arrancar el servidor
+# Inicialización del servidor local
 uvicorn logica:app --reload
-\`\`\`
-*El servidor backend se ejecutará en:* **`http://127.0.0.1:8000`**
-
-### 2. Iniciar el Frontend (React)
-Abre otra terminal en la carpeta de tu frontend y ejecuta:
-\`\`\`bash
-# Instalar los paquetes de Node
-npm install
-
-# Arrancar la aplicación web
-npm start
-\`\`\`
-
-## 🌐 Rutas de la Aplicación
-
-Una vez que ambos servidores estén corriendo, puedes acceder a la aplicación desde tu navegador:
-
-* **Página Principal (Chat e IA):** [http://localhost:3000/](http://localhost:3000/)
-* **Página de Resultados (Gráficas):** [http://localhost:3000/resultados](http://localhost:3000/resultados)
-
----
-*Nota: Recuerda conceder permisos de micrófono en tu navegador si deseas utilizar la función de entrada por voz.*
